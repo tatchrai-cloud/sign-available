@@ -1,0 +1,52 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "spaces": {
+      "$key": {
+        ".read": "$key.matches(/^[A-Za-z0-9]{24,64}$/)",
+        ".write": "$key.matches(/^[A-Za-z0-9]{24,64}$/) && newData.exists()",
+        "staff": {
+          "$id": {
+            ".validate": "$id.length <= 40 && newData.hasChildren(['name'])",
+            "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 200" },
+            "position": { ".validate": "newData.isString() && newData.val().length <= 200" },
+            "role": { ".validate": "newData.isString() && newData.val().length <= 50" },
+            "department": { ".validate": "newData.isString() && newData.val().length <= 200" },
+            "active": { ".validate": "newData.isBoolean()" },
+            "order": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000" },
+            "createdAt": { ".validate": "newData.isString() && newData.val().length <= 40" },
+            "$other": { ".validate": false }
+          }
+        },
+        "events": {
+          "$id": {
+            ".validate": "$id.length <= 40 && newData.hasChildren(['staffId', 'startDate', 'endDate'])",
+            "staffId": { ".validate": "newData.isString() && newData.val().length <= 40 && newData.parent().parent().parent().child('staff').child(newData.val()).exists()" },
+            "staffName": { ".validate": "newData.isString() && newData.val().length <= 200" },
+            "type": { ".validate": "newData.isString() && newData.val().length <= 100" },
+            "title": { ".validate": "newData.isString() && newData.val().length <= 300" },
+            "note": { ".validate": "newData.isString() && newData.val().length <= 500" },
+            "startDate": { ".validate": "newData.isString() && newData.val().matches(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)" },
+            "endDate": { ".validate": "newData.isString() && newData.val().matches(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)" },
+            "blockedDates": {
+              "$i": { ".validate": "$i.length <= 3 && newData.isString() && newData.val().matches(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)" }
+            },
+            "createdAt": { ".validate": "newData.isString() && newData.val().length <= 40" },
+            "updatedAt": { ".validate": "newData.isString() && newData.val().length <= 40" },
+            "$other": { ".validate": false }
+          }
+        },
+        "holidays": {
+          "$date": {
+            ".validate": "$date.matches(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/) && newData.hasChildren(['date', 'name']) && newData.child('date').val() == $date",
+            "date": { ".validate": "newData.isString()" },
+            "name": { ".validate": "newData.isString() && newData.val().length <= 200" },
+            "$other": { ".validate": false }
+          }
+        },
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}

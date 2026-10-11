@@ -1,0 +1,9 @@
+# ไฟล์ที่มีรหัสพื้นที่ข้อมูล — ห้ามขึ้น GitHub
+claude-config.json
+ลิงก์แชร์-ห้ามเผยแพร่.txt
+*.backup.json
+signdate-backup-*.json
+
+# ไม่ต้องใช้บนเว็บ
+legacy-google-sheet/
+public/
